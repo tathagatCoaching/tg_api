@@ -1,1 +1,1 @@
-# tg_api
+# tathagat-api
