@@ -480,7 +480,7 @@ module.exports = (app, db) => {
     const {sequelize } = db;
     if(req.body) {
       let body = req.body
-      let sqlQuery = "SELECT tst.subjectId, tst.topicId, tst.chapterChapterId, tst.packagePackageId, tst.sorting_order, tst.Test_Id, tst.created_at, tst.SectionRule, tst.totaltime, tst.courseCourseId, tst.TestTitle, tst.exam_type, tst.examLevel, tst.instructions, cou.courseName,sub.subjectName, chp.chapterName, tpc.topicName, testAtm.attempt_id FROM Test as tst ";
+      let sqlQuery = "SELECT tst.subjectId, tst.topicId, tst.chapterChapterId, tst.packagePackageId, tst.sorting_order, tst.Test_Id, tst.created_at, tst.SectionRule, tst.totaltime, tst.courseCourseId, tst.TestTitle, tst.exam_type, tst.examLevel, tst.instructions, cou.courseName,sub.subjectName, chp.chapterName, tpc.topicName, testAtm.attempt_id,testAtm.submitted_at FROM Test as tst ";
       sqlQuery +=" INNER JOIN  courses as cou ON cou.courseId = tst.courseCourseId ";
       sqlQuery +=" LEFT JOIN  subjects as sub ON sub.subjectId = tst.subjectId ";
       sqlQuery +=" LEFT JOIN  chapters as chp ON chp.chapterId = tst.chapterChapterId ";
@@ -738,7 +738,6 @@ module.exports = (app, db) => {
       }
     }
   });
-
 
   app.get('/gettest/:testId/:userId/:PackageId', (req, res) => {
     Test.findAll({
