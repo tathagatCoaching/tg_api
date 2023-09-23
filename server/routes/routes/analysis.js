@@ -446,6 +446,8 @@ module.exports = (app, db) => {
 						let sectionArr = s.testResult.section;
 						var secNum = 1;
 						var secIndex = 0;
+						var overallPercentile = 0;
+						var overallAccuracy = 0;
 						for (var secData of sectionArr) {
 							secNum = parseInt(secIndex) + 1;
 							var secScore = await getTestSectionPercentile(params, secNum);
@@ -460,6 +462,8 @@ module.exports = (app, db) => {
 							secData.chapterReport = chapterdata;
 							s.testResult.section[secIndex] = secData;
 							var accuracy = (secData.correctAnswers * 100) / secData.answered;
+							overallPercentile += parseFloat(secScore.percentile.toFixed(2));
+							overallAccuracy += parseFloat(accuracy.toFixed(2));
 							s.testResult.section[secIndex]["overallPerformanceSummary"] = {
 								rank: secScore.rank,
 								score: secData.score,
@@ -508,6 +512,13 @@ module.exports = (app, db) => {
 						});
 
 						result["leaderBoardList"] = leaderBoardList;
+						result["overallPerformanceSummary"] = {
+							rank: scoreData.rank,
+							score: s.testResult.netScore,
+							attempted: sectionArr.reduce((a, b) => a + b.answered, 0),
+							accuracy: overallAccuracy / sectionArr.length,
+							percentile: (overallPercentile / sectionArr.length).toFixed(2),
+						};
 
 						res.send({ status: 200, data: result });
 					})
